@@ -6,21 +6,18 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('seller_id').unsigned().references('sellers.id')
-      table.integer('company_id').unsigned().references('companies.id')
-      table.integer('n_facture')
-      table.date('f_facture')
-      table.string('condition')
-      table.decimal('amount')
-      table.decimal('credit')
-      table.decimal('rest')
-      table.decimal('percentage')
-      table.decimal('commission')
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+      table.integer('seller_id').unsigned().references('sellers.id').notNullable()
+      table.integer('company_id').unsigned().references('companies.id').notNullable()
+      table.integer('n_facture').notNullable()
+      table.timestamp('f_facture', { useTz: true }).notNullable()
+      table.string('condition').notNullable()
+      table.decimal('amount').notNullable()
+      table.decimal('credit').notNullable()
+      table.decimal('rest').notNullable()
+      table.decimal('percentage').notNullable()
+      table.decimal('commission').notNullable()
+      table.timestamp('created_at', { useTz: true }).nullable()
+      table.timestamp('updated_at', { useTz: true }).nullable()
     })
   }
 

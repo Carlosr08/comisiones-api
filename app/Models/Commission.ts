@@ -14,8 +14,8 @@ export default class Commission extends BaseModel {
   @column()
   public n_facture: number
 
-  @column()
-  public f_facture: Date
+  @column.dateTime({ autoCreate: true })
+  public f_facture: DateTime
 
   @column()
   public condition: string
