@@ -34,7 +34,7 @@ export default class SellersController {
       const verifyDocument = await Seller.findBy("document", body.document)
       if (verifyDocument) throw new Error("Documento ya registrado")
 
-      // crear comerciante si no hay errores
+      // crear Vendedor si no hay errores
       await Seller.create({
         name: body.name,
         code: body.code,
@@ -43,7 +43,7 @@ export default class SellersController {
       }, { client: trx }
       ).catch((e) => {
         // retornar error si hay en la base de datos
-        throw new Error("Comerciante no creado " + e)
+        throw new Error("Vendedor no creado " + e)
       })
 
       // guardar transaccion
@@ -53,7 +53,7 @@ export default class SellersController {
       // si no existe error rotornará
       return {
         error: false,
-        message: "Comerciante creado",
+        message: "Vendedor creado",
       }
     } catch (error) {
       // cerrar transaccion se existe error
@@ -84,7 +84,7 @@ export default class SellersController {
 
       // verificar si exite el codigo del param
       const verifyCodeParam = await Seller.findBy("code", code)
-      if (!verifyCodeParam) throw new Error("Comerciante no encontrado")
+      if (!verifyCodeParam) throw new Error("Vendedor no encontrado")
 
       // verificar si exite el codigo
       if (body.code !== verifyCodeParam.code) {
@@ -114,7 +114,7 @@ export default class SellersController {
       // si no existe error rotornará
       return {
         error: false,
-        message: "Comerciante actualizado",
+        message: "Vendedor actualizado",
       }
 
     } catch (error) {
@@ -127,5 +127,27 @@ export default class SellersController {
         message: error.message,
       })
     }
+  }
+
+  public async deleteSeller({request, response}){
+    const code = request.param('code')
+    try {
+      if(!code) throw new Error('Ingrese un codigo')
+
+      const verifyCode = await Seller.findBy('code', code)
+      if(!verifyCode) throw new Error('Codigo no registrado');
+
+      await verifyCode.delete()
+
+      return {
+        error: false,
+        message: 'Vendedor eliminado'
+      }
+    } catch (error) {
+      return response.badRequest({
+        error: true,
+        message: error.message
+      })
+    } 
   }
 }
